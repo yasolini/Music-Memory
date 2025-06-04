@@ -1,5 +1,5 @@
 import { SvelteMap } from 'svelte/reactivity';
-import { getToken, toSpotify } from './oAuth';
+import { toSpotify } from './oAuth';
 
 export interface ProfileData {
 	market: string;
@@ -75,7 +75,7 @@ export async function getPlaylists(userId: string) {
 	const PlaylistsMetaDataMetaData: PlaylistMetaDataMetaData | PlaylistMetaDataMetaDataError =
 		await response.json();
 	//console.log('die response', response);
-	//console.log('Playlist Items Meta Data: ', PlaylistsMetaDataMetaData);
+	console.log('Playlist Items Meta Data: ', PlaylistsMetaDataMetaData);
 
 	if (Object.hasOwn(PlaylistsMetaDataMetaData, 'error')) {
 		localStorage.removeItem('access_token');
@@ -115,6 +115,6 @@ export async function getSongs(playlistId: string) {
 	let UriMetaDataMappingsEight = UriMetaDataMappingsShuffle.slice(0, 8);
 	//console.log('Map 8 Entries', UriMetaDataMappingsEight);
 	let UriMetaDataMappingsEnd = new SvelteMap(UriMetaDataMappingsEight);
-	//console.log('Eight als Map', UriMetaDataMappingsEnd);
+	console.log('Eight als Map', UriMetaDataMappingsEnd);
 	return UriMetaDataMappingsEnd;
 }

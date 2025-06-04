@@ -64,7 +64,7 @@
 
 <div class="flex h-screen w-full flex-col border bg-slate-900">
 	<Header />
-	<h1 class=" border pt-8 text-center text-4xl text-white">Play Game</h1>
+	<h1 class="  pt-8 text-center text-4xl text-white">Play Game</h1>
 
 	<button
 		onclick={() => {
@@ -75,7 +75,7 @@
 	>
 
 	<div class="flex flex-1 items-center justify-center">
-		<div class="h-11/12 w-xl flex items-center justify-center rounded-2xl bg-slate-500">
+		<div class="flex h-11/12 w-xl items-center justify-center rounded-2xl bg-slate-500">
 			<dialog
 				bind:this={dialog}
 				class="open: rounded-2xl bg-slate-800 backdrop:bg-gray-400 backdrop:opacity-60 open:h-96 open:w-96 open:self-center open:justify-self-center"
