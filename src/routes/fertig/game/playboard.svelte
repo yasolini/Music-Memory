@@ -72,10 +72,10 @@
 
 <div class="justify-items-center">
 	<div
-		class="grid grid-flow-col grid-rows-4 justify-items-center gap-4 rounded-2xl bg-slate-700 p-4"
+		class="mt-4 grid h-11/12 w-xl grid-flow-col grid-rows-4 items-center justify-center justify-items-center gap-4 rounded-2xl bg-[#9E9E9E] p-4"
 	>
 		{#if win}
-			<p>gewonnen</p>
+			<h1>gewonnen</h1>
 		{/if}
 		{#each cards as card}
 			<!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions (because of reasons) wichtig für ARIA später!!!-->
@@ -94,7 +94,7 @@
 				}}
 				class={{
 					invisible: card.found,
-					'flex h-32 w-32 items-center justify-center rounded-2xl  bg-slate-500 text-white': true
+					'flex h-32 w-32 items-center justify-center rounded-2xl bg-[#212121] stroke-white hover:stroke-green-600': true
 				}}
 			>
 				{#if card === cardA}

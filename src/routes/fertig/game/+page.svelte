@@ -62,37 +62,53 @@
 	}
 </script>
 
-<div class="flex h-screen w-full flex-col border bg-slate-900">
+<div class=" flex h-screen w-full flex-col bg-[#212121]">
 	<Header />
-	<h1 class="  pt-8 text-center text-4xl text-white">Play Game</h1>
+	<div class="relative m-2 flex items-center justify-center">
+		<h1 class=" text-4xl text-white">Game</h1>
 
-	<button
-		onclick={() => {
-			gameStart(userId);
-		}}
-		class="mb-12 rounded-sm bg-slate-800 p-3 text-white"
-		type="button">Play again</button
-	>
+		<button
+			class="absolute right-4 rounded-2xl border p-2 text-white hover:text-green-600 focus:ring-8 focus:ring-green-600 focus:outline-none"
+			type="button"
+			onclick={() => gameStart(userId)}
+		>
+			Play again
+		</button>
+	</div>
 
 	<div class="flex flex-1 items-center justify-center">
-		<div class="flex h-11/12 w-xl items-center justify-center rounded-2xl bg-slate-500">
+		<div class="mt-4 flex h-11/12 w-xl items-center justify-center rounded-2xl bg-[#9E9E9E]">
 			<dialog
 				bind:this={dialog}
-				class="open: rounded-2xl bg-slate-800 backdrop:bg-gray-400 backdrop:opacity-60 open:h-96 open:w-96 open:self-center open:justify-self-center"
+				aria-labelledby="dialog1Title"
+				aria-describedby="dialog1Desc"
+				class="space-y-4 rounded-2xl p-6 text-xl text-white ring-4 ring-green-600 ring-offset-2 ring-offset-[#212121] outline-none
+				backdrop:bg-neutral-800
+    			backdrop:opacity-60
+				open:size-auto
+				open:self-center
+				open:justify-self-center
+				open:bg-[#212121]
+				focus:ring-8 focus:ring-green-600 focus:outline-none"
 			>
 				<form method="dialog">
-					<p>die Playlist muss mindestends 8 Lieder enthalten</p>
+					<h1 class="p-4 text-center text-3xl text-white" id="dialog1Title">Wähle eine Playlist</h1>
+					<p id="dialog1Desc">die Playlist muss mindestends 8 Lieder enthalten</p>
 
 					{#if playlistSData !== null}
 						{#each playlistSData.items as item}
 							<button
-								class="m-7 flex place-self-center justify-self-center rounded-2xl bg-slate-700 p-4 text-2xl text-white"
+								aria-haspopup="dialog"
+								aria-controls="rules-dialog"
+								class="m-6 rounded-2xl border p-2 text-white hover:text-green-600 focus:ring-8 focus:ring-green-600"
 								onclick={async () => {
 									UriMetaDataMappings = await getSongs(item.id);
 									initialized = true;
 
 									dialog.close();
-								}}>Name: {item.name} Songs: {item.tracks.total}</button
+								}}
+								><span class="block">Name: {item.name}</span>
+								<span class="block">Songs: {item.tracks.total}</span></button
 							>
 						{/each}
 					{/if}
