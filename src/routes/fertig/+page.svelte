@@ -62,7 +62,7 @@
     open:bg-[#212121]
 	focus:ring-8 focus:ring-green-600 focus:outline-none"
 	>
-		<h2 class="p-4 text-center text-3xl text-white" id="dialog1Title">Spielreglen</h2>
+		<h2 class="p-4 text-center text-3xl text-white" id="dialog1Title">Spielregeln</h2>
 		<p id="dialog1Desc">1. Wähle zwei Karten, um jeweils 5-Sekunden-Ausschnitte abzuspielen.</p>
 		<p id="dialog2Desc">
 			2. Stimmen die Songs überein, verschwinden die Karten; andernfalls werden sie nach 5 Sekunden

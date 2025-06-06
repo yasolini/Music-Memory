@@ -68,6 +68,7 @@
 		<h1 class=" text-4xl text-white">Game</h1>
 
 		<button
+			aria-label="Spiel neu starten"
 			class="absolute right-4 rounded-2xl border p-2 text-white hover:text-green-600 focus:ring-8 focus:ring-green-600 focus:outline-none"
 			type="button"
 			onclick={() => gameStart(userId)}
@@ -77,7 +78,7 @@
 	</div>
 
 	<div class="flex flex-1 items-center justify-center">
-		<div class="mt-4 flex h-11/12 w-xl items-center justify-center rounded-2xl bg-[#9E9E9E]">
+		<div class="flex h-11/12 w-xl items-center justify-center rounded-2xl bg-[#9E9E9E]">
 			<dialog
 				bind:this={dialog}
 				aria-labelledby="dialog1Title"
@@ -98,6 +99,7 @@
 					{#if playlistSData !== null}
 						{#each playlistSData.items as item}
 							<button
+								aria-label="Playlist"
 								aria-haspopup="dialog"
 								aria-controls="rules-dialog"
 								class="m-6 rounded-2xl border p-2 text-white hover:text-green-600 focus:ring-8 focus:ring-green-600"

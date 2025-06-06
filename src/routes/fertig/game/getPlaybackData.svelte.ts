@@ -12,7 +12,7 @@ export async function putSongs(uri: string) {
 				},
 				body: JSON.stringify({
 					uris: [uri],
-					position_ms: 60000
+					position_ms: 80000
 				})
 			}
 		);

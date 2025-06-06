@@ -1,4 +1,4 @@
-<header class="border-b-2 border-b-green-600 bg-[#212121] pt-2 pl-4">
+<header class="grid grid-cols-5 border-b-2 border-b-green-600 bg-[#212121] p-2 pb-4">
 	<a
 		class="block size-fit focus-visible:ring-8 focus-visible:ring-green-600 focus-visible:ring-offset-2"
 		href="./"
@@ -17,5 +17,5 @@
 			/>
 		</svg>
 	</a>
-	<h1 class="flex-1 pb-8 text-center text-6xl font-bold text-white">Music Memory</h1>
+	<h1 class="col-span-3 text-center text-3xl font-bold text-white md:text-5xl">Music Memory</h1>
 </header>
