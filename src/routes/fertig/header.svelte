@@ -1,6 +1,6 @@
 <header class="grid grid-cols-5 border-b-2 border-b-green-600 bg-[#212121] p-2 pb-4">
 	<a
-		class="block size-fit focus-visible:ring-8 focus-visible:ring-green-600 focus-visible:ring-offset-2"
+		class="block size-fit focus-visible:ring-6 focus-visible:ring-green-600 focus-visible:ring-offset-2"
 		href="./"
 		aria-label="Zurück"
 	>

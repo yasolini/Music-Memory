@@ -16,6 +16,7 @@
 		trackName: string;
 		artistName: string;
 	}
+	let focusStyle = 'focus:ring-6 focus:ring-green-600 focus:outline-none ne-roundedfocus:outli';
 
 	let dialog = $state() as HTMLDialogElement;
 
@@ -65,15 +66,17 @@
 <div class=" flex h-screen w-full flex-col bg-[#212121]">
 	<Header />
 	<div class="relative m-2 flex items-center justify-center">
-		<h1 class=" text-4xl text-white">Game</h1>
+		<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+		<h1 tabindex="0" class={focusStyle + ' text-4xl text-white'}>Game</h1>
 
 		<button
 			aria-label="Spiel neu starten"
-			class="absolute right-4 rounded-2xl border p-2 text-white hover:text-green-600 focus:ring-8 focus:ring-green-600 focus:outline-none"
+			class={focusStyle +
+				' absolute right-4 rounded-2xl border p-2 text-white hover:text-green-600'}
 			type="button"
 			onclick={() => gameStart(userId)}
 		>
-			Play again
+			nochmal spielen
 		</button>
 	</div>
 
@@ -90,19 +93,25 @@
 				open:self-center
 				open:justify-self-center
 				open:bg-[#212121]
-				focus:ring-8 focus:ring-green-600 focus:outline-none"
+				focus:ring-6 focus:ring-green-600 focus:outline-none"
 			>
 				<form method="dialog">
-					<h1 class="p-4 text-center text-3xl text-white" id="dialog1Title">Wähle eine Playlist</h1>
-					<p id="dialog1Desc">die Playlist muss mindestends 8 Lieder enthalten</p>
+					<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+					<h1
+						tabindex="0"
+						class={focusStyle + ' p-4 text-center text-3xl text-white'}
+						id="dialog1Title"
+					>
+						Wähle eine Playlist
+					</h1>
+					<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+					<p id="dialog1Desc">die Playlist muss minimum 8 Lieder enthalten</p>
 
 					{#if playlistSData !== null}
 						{#each playlistSData.items as item}
 							<button
-								aria-label="Playlist"
-								aria-haspopup="dialog"
-								aria-controls="rules-dialog"
-								class="m-6 rounded-2xl border p-2 text-white hover:text-green-600 focus:ring-8 focus:ring-green-600"
+								type="button"
+								class={focusStyle + ' m-6 rounded-2xl border p-2 text-white hover:text-green-600'}
 								onclick={async () => {
 									UriMetaDataMappings = await getSongs(item.id);
 									initialized = true;
@@ -110,13 +119,14 @@
 									dialog.close();
 								}}
 								><span class="block">Name: {item.name}</span>
-								<span class="block">Songs: {item.tracks.total}</span></button
-							>
+								<span class="block">Lieder: {item.tracks.total}</span>
+							</button>
 						{/each}
 					{/if}
 				</form>
 			</dialog>
 
+			<div role="alert" class="sr-only">Spiel startet jetzt!</div>
 			{#if initialized}
 				<Playboard {UriMetaDataMappings} />
 			{/if}

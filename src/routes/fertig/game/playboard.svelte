@@ -22,6 +22,7 @@
 
 	let isPlaying = $state(false);
 	let win = $derived.by(() => cards.every((card) => card.found));
+	let gameAnnouncement = $state();
 
 	function createCards(songs: string[]) {
 		songs.forEach((uri) => {
@@ -54,6 +55,7 @@
 			if (cardA.value === cardB.value) {
 				setTimeout(() => {
 					if (cardA !== null && cardB !== null) {
+						announce('Paar gefunden');
 						cardA.found = true;
 						cardB.found = true;
 						cardA = null;
@@ -62,32 +64,46 @@
 				}, 4000);
 			} else {
 				setTimeout(() => {
+					announce('Kein Paar, versuche es erneut');
 					cardA = null;
 					cardB = null;
 				}, 4000);
 			}
 		}
 	}
-
 	Shuffle(cards);
+
+	function announce(message: string) {
+		gameAnnouncement = message;
+		setTimeout(() => (gameAnnouncement = ''), 1000);
+	}
 </script>
 
 <div class="justify-items-center">
 	<div
 		class="grid h-11/12 w-xl grid-flow-col grid-rows-4 items-center justify-center justify-items-center gap-4 rounded-2xl bg-[#9E9E9E] p-4"
 	>
+		{#if gameAnnouncement}
+			<div aria-live="assertive" class="sr-only">
+				{gameAnnouncement}
+			</div>
+		{/if}
+
 		{#if win}
-			<h1>gewonnen</h1>
+			<h1 class="text-center text-6xl text-white">gewonnen</h1>
 		{/if}
 		{#each cards as card}
 			<!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions (because of reasons) wichtig für ARIA später!!!-->
 			<button
-				aria-label="Verdeckte Karte"
+				aria-label={card === cardA || card === cardB
+					? 'aufgedeckt'
+					: 'Bestätige - um Karte aufzudecken'}
 				onclick={async () => {
-					if (!isPlaying) {
+					if (!isPlaying && !card.found) {
 						isPlaying = true;
 						songIsLoading = card.id;
 						await putSongs(card.value);
+
 						// Weird little hack because spotify is laggy and weird :(
 						(window as any).player.addListener('player_state_changed', () => {
 							(window as any).player.removeListener('player_state_changed');
@@ -102,12 +118,14 @@
 					}
 				}}
 				class={{
+					'opacity-50': isPlaying,
 					invisible: card.found,
 					'relative flex size-28 items-center justify-center rounded-2xl bg-[#212121] text-neutral-300   duration-200 hover:scale-105  hover:text-green-600 focus-visible:text-green-600 focus-visible:ring-8 focus-visible:ring-green-600 focus-visible:ring-offset-2': true
 				}}
 			>
 				{#if card === cardA}
 					<svg
+						aria-hidden="true"
 						xmlns="http://www.w3.org/2000/svg"
 						viewBox="0 0 24 24"
 						fill="currentColor"
@@ -123,9 +141,12 @@
 							d="M15.932 7.757a.75.75 0 0 1 1.061 0 6 6 0 0 1 0 8.486.75.75 0 0 1-1.06-1.061 4.5 4.5 0 0 0 0-6.364.75.75 0 0 1 0-1.06Z"
 						/>
 					</svg>
-					<div class=""></div>
+					<p class="size-8 border">
+						{card === cardA || card === cardB ? 'aufgedeckte Karte' : 'verdeckte Karte'}
+					</p>
 				{:else if card === cardB}
 					<svg
+						aria-hidden="true"
 						xmlns="http://www.w3.org/2000/svg"
 						viewBox="0 0 24 24"
 						fill="currentColor"
@@ -140,6 +161,7 @@
 					</svg>
 				{:else}
 					<svg
+						aria-hidden="true"
 						xmlns="http://www.w3.org/2000/svg"
 						viewBox="0 0 24 24"
 						fill="currentColor"
