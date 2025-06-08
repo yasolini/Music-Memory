@@ -64,7 +64,6 @@
 				}, 4000);
 			} else {
 				setTimeout(() => {
-					announce('Kein Paar, versuche es erneut');
 					cardA = null;
 					cardB = null;
 				}, 4000);
@@ -77,32 +76,37 @@
 		gameAnnouncement = message;
 		setTimeout(() => (gameAnnouncement = ''), 1000);
 	}
+
+	$effect(() => {
+		win;
+		announce('Du hast gewonnen!');
+	});
 </script>
 
 <div class="justify-items-center">
 	<div
 		class="grid h-11/12 w-xl grid-flow-col grid-rows-4 items-center justify-center justify-items-center gap-4 rounded-2xl bg-[#9E9E9E] p-4"
 	>
-		{#if gameAnnouncement}
-			<div aria-live="assertive" class="sr-only">
-				{gameAnnouncement}
-			</div>
-		{/if}
+		<div aria-live="assertive" class="sr-only">
+			{gameAnnouncement}
+		</div>
 
 		{#if win}
-			<h1 class="text-center text-6xl text-white">gewonnen</h1>
+			<h1 class="absolute self-center text-6xl text-white">gewonnen</h1>
 		{/if}
+
 		{#each cards as card}
 			<!-- svelte-ignore a11y_click_events_have_key_events, a11y_no_static_element_interactions (because of reasons) wichtig für ARIA später!!!-->
 			<button
-				aria-label={card === cardA || card === cardB
-					? 'aufgedeckt'
-					: 'Bestätige - um Karte aufzudecken'}
+				aria-label={cardA === null
+					? 'Bestätige um erste Karte aufzudecken'
+					: card === cardA
+						? 'aufgedeckt'
+						: 'Bestätige um zweite Karte aufzudecken'}
 				onclick={async () => {
 					if (!isPlaying && !card.found) {
 						isPlaying = true;
 						songIsLoading = card.id;
-						await putSongs(card.value);
 
 						// Weird little hack because spotify is laggy and weird :(
 						(window as any).player.addListener('player_state_changed', () => {
@@ -112,9 +116,11 @@
 							setTimeout(() => {
 								(window as any).player.togglePlay();
 								isPlaying = false;
-							}, 4000);
+							}, 5000);
 							handleGameLogic(card);
 						});
+
+						await putSongs(card.value);
 					}
 				}}
 				class={{
@@ -141,9 +147,6 @@
 							d="M15.932 7.757a.75.75 0 0 1 1.061 0 6 6 0 0 1 0 8.486.75.75 0 0 1-1.06-1.061 4.5 4.5 0 0 0 0-6.364.75.75 0 0 1 0-1.06Z"
 						/>
 					</svg>
-					<p class="size-8 border">
-						{card === cardA || card === cardB ? 'aufgedeckte Karte' : 'verdeckte Karte'}
-					</p>
 				{:else if card === cardB}
 					<svg
 						aria-hidden="true"

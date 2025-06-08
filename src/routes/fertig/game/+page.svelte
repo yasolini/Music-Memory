@@ -126,8 +126,8 @@
 				</form>
 			</dialog>
 
-			<div role="alert" class="sr-only">Spiel startet jetzt!</div>
 			{#if initialized}
+				<div role="alert" class="sr-only">Spiel startet jetzt!</div>
 				<Playboard {UriMetaDataMappings} />
 			{/if}
 		</div>
