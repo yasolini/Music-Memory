@@ -66,9 +66,7 @@
 <div class=" flex h-screen w-full flex-col bg-[#212121]">
 	<Header />
 	<div class="relative m-2 flex items-center justify-center">
-		<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
-		<h1 tabindex="0" class={focusStyle + ' text-4xl text-white'}>Game</h1>
-
+		<h1 class=" text-4xl text-white">Game</h1>
 		<button
 			aria-label="Spiel neu starten"
 			class={focusStyle +
@@ -96,15 +94,10 @@
 				focus:ring-6 focus:ring-green-600 focus:outline-none"
 			>
 				<form method="dialog">
-					<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
-					<h1
-						tabindex="0"
-						class={focusStyle + ' p-4 text-center text-3xl text-white'}
-						id="dialog1Title"
-					>
+					<h1 class=" p-4 text-center text-3xl text-white" id="dialog1Title">
 						Wähle eine Playlist
 					</h1>
-					<!-- svelte-ignore a11y_no_noninteractive_tabindex -->
+
 					<p id="dialog1Desc">die Playlist muss minimum 8 Lieder enthalten</p>
 
 					{#if playlistSData !== null}

@@ -22,6 +22,7 @@
 
 	let isPlaying = $state(false);
 	let win = $derived.by(() => cards.every((card) => card.found));
+	let totalPairs = $derived.by(() => cards.filter((card) => card.found).length / 2);
 	let gameAnnouncement = $state();
 
 	function createCards(songs: string[]) {
@@ -55,18 +56,18 @@
 			if (cardA.value === cardB.value) {
 				setTimeout(() => {
 					if (cardA !== null && cardB !== null) {
-						announce('Paar gefunden');
+						announce(`${totalPairs + 1} Paare von acht gefunden`);
 						cardA.found = true;
 						cardB.found = true;
 						cardA = null;
 						cardB = null;
 					}
-				}, 4000);
+				}, 5000);
 			} else {
 				setTimeout(() => {
 					cardA = null;
 					cardB = null;
-				}, 4000);
+				}, 5000);
 			}
 		}
 	}
@@ -100,7 +101,7 @@
 			<button
 				aria-label={cardA === null
 					? 'Bestätige um erste Karte aufzudecken'
-					: card === cardA
+					: card === cardA || card === cardB
 						? 'aufgedeckt'
 						: 'Bestätige um zweite Karte aufzudecken'}
 				onclick={async () => {
