@@ -8,7 +8,7 @@
 		getSongs
 	} from './getUserData';
 	import { getToken, toSpotify } from './oAuth';
-	import Header from '../header.svelte';
+	import Header from './header.svelte';
 	import type { SvelteMap } from 'svelte/reactivity';
 	import Playboard from './playboard.svelte';
 
@@ -16,17 +16,14 @@
 		trackName: string;
 		artistName: string;
 	}
-	let focusStyle = 'focus:ring-6 focus:ring-green-600 focus:outline-none ne-roundedfocus:outli';
-
-	let dialog = $state() as HTMLDialogElement;
-
-	let userData: ProfileData | null = $state(null);
-	let userId: string;
-	let playlistSData: PlaylistMetaDataMetaData | null = $state(null);
 
 	let accessToken: string | null = null;
+	let focusStyle = 'focus:ring-6 focus:ring-green-600 focus:outline-none ne-roundedfocus:outli';
+	let userId: string;
+	let dialog = $state() as HTMLDialogElement;
+	let userData: ProfileData | null = $state(null);
+	let playlistSData: PlaylistMetaDataMetaData | null = $state(null);
 	let initialized = $state(false);
-
 	let UriMetaDataMappings = $state() as SvelteMap<string, UriMetaData>;
 
 	onMount(async () => {
@@ -144,13 +141,11 @@
 					},
 					volume: 0.5
 				});
-				// Ready
 				player.addListener('ready', ({ device_id }) => {
 					window.localStorage.setItem('device_id', device_id);
 					console.log('Ready with Device ID', device_id);
 				});
 
-				// Not Ready
 				player.addListener('not_ready', ({ device_id }) => {
 					console.log('Device ID has gone offline', device_id);
 				});
@@ -167,7 +162,6 @@
 				});
 
 				player.connect();
-				//console.log('player is connected');
 				window.player = player;
 			};
 		</script>

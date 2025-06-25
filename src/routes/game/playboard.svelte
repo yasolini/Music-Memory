@@ -13,7 +13,6 @@
 		found: boolean;
 	}
 	const { UriMetaDataMappings }: { UriMetaDataMappings: SvelteMap<string, UriMetaData> } = $props();
-	//console.log('UriMetaData in playboad: ', UriMetaDataMappings);
 	let cards: Card[] = $state([]);
 	let cardA: null | Card = $state(null);
 	let cardB: null | Card = $state(null);

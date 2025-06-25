@@ -2,9 +2,10 @@
 let codeChallenge = '';
 
 const clientId = 'f87bf4bf9a284f6ca5c83e14479287b0';
-const redirectUri = 'http://localhost:5173/spotify4';
+const redirectUri = 'http://localhost:5173/game';
 
-const scope = 'user-read-private user-read-email playlist-read-collaborative';
+const scope =
+	'user-read-email user-read-private playlist-read-collaborative user-read-playback-state user-modify-playback-state user-read-currently-playing app-remote-control streaming';
 const authUrl = new URL('https://accounts.spotify.com/authorize');
 
 const generateRandomString = (length: number) => {
@@ -31,9 +32,8 @@ const base64encode = (input: ArrayBuffer) => {
 export async function toSpotify() {
 	const hashed = await sha256(codeVerifier);
 	codeChallenge = base64encode(hashed);
-	console.log('codeChallenge check');
 
-	// generated in the previous step
+	// generated in previous step
 	window.localStorage.setItem('code_verifier', codeVerifier);
 
 	const params = {
@@ -52,7 +52,6 @@ export async function toSpotify() {
 export const getToken = async (code: string) => {
 	// stored in the previous step
 	const codeVerifier = localStorage.getItem('code_verifier') as string;
-	console.log('codeVerifier check');
 
 	const url = 'https://accounts.spotify.com/api/token';
 	const payload = {
@@ -68,10 +67,7 @@ export const getToken = async (code: string) => {
 			code_verifier: codeVerifier
 		})
 	};
-
-	const body = await fetch(url, payload);
-	const response = await body.json();
-	console.log('response check');
-
-	localStorage.setItem('access_token', response.access_token);
+	const response = await fetch(url, payload);
+	const body = await response.json();
+	localStorage.setItem('access_token', body.access_token);
 };

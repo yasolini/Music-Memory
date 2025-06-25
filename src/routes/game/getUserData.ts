@@ -1,25 +1,33 @@
 import { SvelteMap } from 'svelte/reactivity';
+import { toSpotify } from './oAuth';
 
 export interface ProfileData {
 	market: string;
 	id: string;
 }
 
-//MetaDaten aller Playlisten des Users
+//MetaDaten von Playlisten des Users
 export interface PlaylistMetaDataMetaData {
 	items: PlaylistItemsMetaData[];
 }
-//MetaDaten über eine Playlist des Users
+
+interface PlaylistMetaDataMetaDataError {
+	error: { status: number };
+}
+
+//MetaDaten von einer Playlist des Users
 interface PlaylistItemsMetaData {
 	id: string;
 	name: string;
+	tracks: Tracks;
 }
-//MetaDaten über ausgewählte Playlist
+
+//MetaDaten von ausgewählter Playlist
 export interface MetaDataChoosenPlaylist {
 	id: string;
 	tracks: Tracks;
 }
-//MetaDaten über Songs aus der Playlist
+//MetaDaten von Songs aus der Playlist
 interface Tracks {
 	items: TrackObject[];
 	total: number;
@@ -41,10 +49,6 @@ interface UriMetaData {
 	artistName: string;
 }
 
-//export let uris: String[] = [];
-export let UriMetaDataMappings = new SvelteMap<string, UriMetaData>();
-
-//get UserData
 export async function getProfile(): Promise<ProfileData> {
 	let accessToken = localStorage.getItem('access_token');
 	const response = await fetch('https://api.spotify.com/v1/me', {
@@ -54,11 +58,10 @@ export async function getProfile(): Promise<ProfileData> {
 	});
 
 	const userData = await response.json();
-	console.log('user Daten: ', userData);
+	//console.log('user Daten: ', userData);
 	return userData;
 }
 
-//get Playlists
 export async function getPlaylists(userId: string) {
 	let accessToken = localStorage.getItem('access_token');
 	const response = await fetch(`https://api.spotify.com/v1/users/${userId}/playlists`, {
@@ -67,13 +70,20 @@ export async function getPlaylists(userId: string) {
 		}
 	});
 
-	const PlaylistsMetaDataMetaData: PlaylistMetaDataMetaData = await response.json();
-	//console.log('Playlist Meta Data Meta Data: ', PlaylistsMetaDataMetaData);
-	console.log('Playlist Items Meta Data: ', PlaylistsMetaDataMetaData.items);
-	return PlaylistsMetaDataMetaData;
+	const PlaylistsMetaDataMetaData: PlaylistMetaDataMetaData | PlaylistMetaDataMetaDataError =
+		await response.json();
+	//console.log('die response', response);
+	console.log('Playlist Items Meta Data: ', PlaylistsMetaDataMetaData);
+
+	if (Object.hasOwn(PlaylistsMetaDataMetaData, 'error')) {
+		localStorage.removeItem('access_token');
+		toSpotify();
+	}
+	return PlaylistsMetaDataMetaData as PlaylistMetaDataMetaData;
 }
-//get Songs
+
 export async function getSongs(playlistId: string) {
+	let UriMetaDataMappings = new SvelteMap<string, UriMetaData>();
 	let accessToken = localStorage.getItem('access_token');
 	const response = await fetch(`https://api.spotify.com/v1/playlists/${playlistId}`, {
 		headers: {
@@ -84,8 +94,6 @@ export async function getSongs(playlistId: string) {
 	const MetaDataChoosenPlaylist: MetaDataChoosenPlaylist = await response.json();
 	const items = MetaDataChoosenPlaylist.tracks.items;
 
-	console.log('Choosen Playlist Meta Data: ', MetaDataChoosenPlaylist);
-	console.log('Playlist tracks: ', MetaDataChoosenPlaylist.tracks.items);
 	items.forEach((item: TrackObject) =>
 		item.track.artists.forEach((aName) => {
 			UriMetaDataMappings.set(item.track.uri, {
@@ -94,6 +102,11 @@ export async function getSongs(playlistId: string) {
 			});
 		})
 	);
-	console.log('ganze Map', UriMetaDataMappings);
-	console.log('nur uris', UriMetaDataMappings.keys());
+
+	let UriMetaDataMappingsShuffle = UriMetaDataMappings.entries()
+		.toArray()
+		.sort(() => Math.random() - 0.5);
+	let UriMetaDataMappingsEight = UriMetaDataMappingsShuffle.slice(0, 8);
+	let UriMetaDataMappingsEnd = new SvelteMap(UriMetaDataMappingsEight);
+	return UriMetaDataMappingsEnd;
 }
