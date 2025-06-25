@@ -8,8 +8,8 @@
 	}
 
 	interface Card {
-		value: string;
-		id: number;
+		value: string; // enthält Track-ID
+		id: number; // Zur eindeutigen identifizierung der Karte
 		found: boolean;
 	}
 	const { UriMetaDataMappings }: { UriMetaDataMappings: SvelteMap<string, UriMetaData> } = $props();
